@@ -10,8 +10,7 @@ class CategoryTile extends StatelessWidget {
   final ValueChanged<Category> onTap;
 
   const CategoryTile({Key key, this.category, this.onTap})
-      : assert(category != null),
-        super(key: key);
+      : super(key: key);
 
   // Used Earlier when no backdrop
   void _navigateToConverter(BuildContext context) {
@@ -22,7 +21,7 @@ class CategoryTile extends StatelessWidget {
 
           // This prevents the attempt to resize the screen when the keyboard
           // is opened
-          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
         );
       },
     ));

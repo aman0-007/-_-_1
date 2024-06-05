@@ -1,18 +1,17 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'category.dart';
 
 const double _kFlingVelocity = 2.0;
 
 class _BackdropPanel extends StatelessWidget {
   const _BackdropPanel({
-    Key key,
-    this.onTap,
-    this.onVerticalDragUpdate,
-    this.onVerticalDragEnd,
-    this.title,
-    this.child,
+    required Key key,
+    required this.onTap,
+    required this.onVerticalDragUpdate,
+    required this.onVerticalDragEnd,
+    required this.title,
+    required this.child,
   }) : super(key: key);
 
   final VoidCallback onTap;
@@ -46,7 +45,7 @@ class _BackdropPanel extends StatelessWidget {
               padding: EdgeInsetsDirectional.only(start: 16.0),
               alignment: AlignmentDirectional.centerStart,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.subhead,
+                style: Theme.of(context).textTheme.titleMedium,
                 child: title,
               ),
             ),
@@ -69,18 +68,18 @@ class _BackdropTitle extends AnimatedWidget {
   final Widget backTitle;
 
   const _BackdropTitle({
-    Key key,
-    Listenable listenable,
-    this.frontTitle,
-    this.backTitle,
+    required Key key,
+    required Listenable listenable,
+    required this.frontTitle,
+    required this.backTitle,
   }) : super(key: key, listenable: listenable);
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> animation = this.listenable;
+    final Listenable animation = this.listenable;
 
     return DefaultTextStyle(
-      style: Theme.of(context).primaryTextTheme.title,
+      style: Theme.of(context).primaryTextTheme.titleLarge,
 
       softWrap: false,
 
@@ -136,16 +135,12 @@ class Backdrop extends StatefulWidget {
   final Widget backTitle;
 
   const Backdrop({
-    @required this.currentCategory,
-    @required this.frontPanel,
-    @required this.backPanel,
-    @required this.frontTitle,
-    @required this.backTitle,
-  })  : assert(currentCategory != null),
-        assert(frontPanel != null),
-        assert(backPanel != null),
-        assert(frontTitle != null),
-        assert(backTitle != null);
+    required this.currentCategory,
+    required this.frontPanel,
+    required this.backPanel,
+    required this.frontTitle,
+    required this.backTitle,
+  });
 
   @override
   _BackdropState createState() => _BackdropState();
@@ -155,7 +150,7 @@ class _BackdropState extends State<Backdrop>
     with SingleTickerProviderStateMixin {
   final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
 
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -211,9 +206,9 @@ class _BackdropState extends State<Backdrop>
   }
 
   double get _backdropHeight {
-    final RenderBox renderBox = _backdropKey.currentContext.findRenderObject();
+    final RenderObject? renderBox = _backdropKey.currentContext!.findRenderObject();
 
-    return renderBox.size.height;
+    return renderBox?.size.height;
   }
 
   // By design: the panel can only be opened with a swipe. To close the panel
@@ -224,7 +219,7 @@ class _BackdropState extends State<Backdrop>
     if (_controller.isAnimating ||
         _controller.status == AnimationStatus.completed) return;
 
-    _controller.value -= details.primaryDelta / _backdropHeight;
+    _controller.value -= (details.primaryDelta! / _backdropHeight);
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -270,6 +265,7 @@ class _BackdropState extends State<Backdrop>
               onVerticalDragUpdate: _handleDragUpdate,
               onVerticalDragEnd: _handleDragEnd,
               title: Text(widget.currentCategory.name),
+              key: null,
               child: widget.frontPanel,
             ),
           ),
@@ -294,13 +290,13 @@ class _BackdropState extends State<Backdrop>
         title: _BackdropTitle(
           listenable: _controller.view,
           frontTitle: widget.frontTitle,
-          backTitle: widget.backTitle,
+          backTitle: widget.backTitle, key: null,
         ),
       ),
       body: LayoutBuilder(
         builder: _buildStack,
       ),
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
     );
   }
 }

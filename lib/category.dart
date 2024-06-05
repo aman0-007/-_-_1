@@ -8,12 +8,9 @@ class Category {
   final List<Unit> units;
 
   const Category({
-    this.iconLocation,
-    this.name,
-    this.color,
-    this.units,
-  })  : assert(iconLocation != null),
-        assert(name != null),
-        assert(color != null),
-        assert(units != null);
+    required this.iconLocation,
+    required this.name,
+    required this.color,
+    required this.units,
+  });
 }

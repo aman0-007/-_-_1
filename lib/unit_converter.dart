@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unit_converter/category.dart';
 import 'unit.dart';
-import 'package:meta/meta.dart';
 import 'api.dart';
 
 const _padding = EdgeInsets.all(16.0);
@@ -9,7 +8,7 @@ const _padding = EdgeInsets.all(16.0);
 class UnitConverter extends StatefulWidget {
   final Category category;
 
-  UnitConverter({@required this.category}) : assert(category != null);
+  UnitConverter({@required this.category});
 
   @override
   _UnitConverterState createState() => _UnitConverterState(category: category);
@@ -42,11 +41,11 @@ class _UnitConverterState extends State<UnitConverter> {
     if (old.category != widget.category) {
       _createDropdownMenuItems();
       _setDefaults();
-      if (_inputValue != null) _updateConversion();
+      _updateConversion();
     }
   }
 
-  _UnitConverterState({@required this.category}) : assert(category != null);
+  _UnitConverterState({@required this.category});
 
   String _format(double conversion) {
     var outputNum = conversion.toStringAsPrecision(7);
@@ -95,7 +94,7 @@ class _UnitConverterState extends State<UnitConverter> {
 
   void _updateInputValue(String input) {
     setState(() {
-      if (input == null || input == '') {
+      if (input == '') {
         _convertedValue = '';
       } else {
         try {
@@ -132,20 +131,16 @@ class _UnitConverterState extends State<UnitConverter> {
       _fromValue = _getUnit(unitName);
     });
     // to change the input according to current from conversion unit
-    if (_inputValue != null) {
-      _updateConversion();
+    _updateConversion();
     }
-  }
 
   void _updateToConversion(dynamic unitName) {
     setState(() {
       _toValue = _getUnit(unitName);
     });
     // to change the input according to current from conversion unit
-    if (_inputValue != null) {
-      _updateConversion();
+    _updateConversion();
     }
-  }
 
   void _createDropdownMenuItems() {
     var newItems = <DropdownMenuItem>[];
@@ -181,7 +176,7 @@ class _UnitConverterState extends State<UnitConverter> {
                 onChanged: onChnaged,
                 value: currentValue,
                 items: _unitMenuItems,
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
           )),
@@ -190,8 +185,7 @@ class _UnitConverterState extends State<UnitConverter> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.category.units == null ||
-        (widget.category.name == apiCurrencyCategory['name'] && _showErrorUI)) {
+    if ((widget.category.name == apiCurrencyCategory['name'] && _showErrorUI)) {
       return SingleChildScrollView(
         child: Container(
           margin: _padding,
@@ -212,7 +206,7 @@ class _UnitConverterState extends State<UnitConverter> {
               Text(
                 "Oh no! We can't connect right now!",
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline.copyWith(
+                style: Theme.of(context).textTheme.headlineSmall.copyWith(
                       color: Colors.white,
                     ),
               ),
@@ -228,9 +222,9 @@ class _UnitConverterState extends State<UnitConverter> {
         children: <Widget>[
           TextField(
             key: _inputKey,
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headlineMedium,
             decoration: InputDecoration(
-              labelStyle: Theme.of(context).textTheme.display1,
+              labelStyle: Theme.of(context).textTheme.headlineMedium,
               labelText: "Input",
               errorText: _showValidationError ? "Invalid Number Entered" : null,
               border:
@@ -259,11 +253,11 @@ class _UnitConverterState extends State<UnitConverter> {
           InputDecorator(
             child: Text(
               _convertedValue,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             decoration: InputDecoration(
                 labelText: "Output",
-                labelStyle: Theme.of(context).textTheme.display1,
+                labelStyle: Theme.of(context).textTheme.headlineMedium,
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0))),
           ),
